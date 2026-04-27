@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CareLink — Dashboard</title>
+    <link rel="icon" type="image/png" href="/images/logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500;600&display=swap"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/pharmacy_dashboard.css">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sb-brand">
+        <div class="sb-logo">
+            <img src="/images/logo.jpg" alt="CareLink"/>
+        </div>
+        <div class="sb-brand-text">
+            <span class="sb-brand-name">CareLink</span>
+            <span class="sb-brand-sub">Pharmacy Portal</span>
+        </div>
+    </div>
+
+    <nav class="sb-nav">
+        <div class="sb-section-label">Main</div>
+        <div class="sb-item active" onclick="setPage('overview', this)">
+            <div class="sb-icon">🏠</div>
+            <span class="sb-label">Overview</span>
+        </div>
+        <div class="sb-item" onclick="setPage('orders', this)">
+            <div class="sb-icon">📦</div>
+            <span class="sb-label">Orders</span>
+        </div>
+        <div class="sb-item" onclick="setPage('patients', this)">
+            <div class="sb-icon">👥</div>
+            <span class="sb-label">Patients</span>
+        </div>
+        <div class="sb-section-label">Reports</div>
+        <div class="sb-item" onclick="setPage('analytics', this)">
+            <div class="sb-icon">📊</div>
+            <span class="sb-label">Analytics</span>
+        </div>
+        <div class="sb-item" onclick="setPage('billing', this)">
+            <div class="sb-icon">🧾</div>
+            <span class="sb-label">Billing</span>
+        </div>
+        <div class="sb-section-label">System</div>
+        <div class="sb-item" onclick="setPage('settings', this)">
+            <div class="sb-icon">⚙️</div>
+            <span class="sb-label">Settings</span>
+        </div>
+    </nav>
+
+    <div class="sb-bottom">
+        <div class="sb-user" onclick="logout()">
+            <div class="sb-user-info">
+                <span class="sb-user-name" id="sbPharmacyName">Logout</span>
+            </div>
+            <span class="sb-logout" title="Sign out">⏻</span>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+
+    <div class="topbar">
+        <div>
+            <span class="topbar-title" id="topbarTitle">Overview</span>
+            <span class="topbar-sub" id="topbarSub">— Friday, 27 March 2026</span>
+        </div>
+        <div class="topbar-right">
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" placeholder="Search orders, patients…"/>
+            </div>
+            <div class="icon-btn">
+                🔔
+                <div class="notif-dot"></div>
+            </div>
+            <div class="icon-btn">⚙️</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="page active" id="page-overview">
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">New Pending Orders Management</div>
+                        <div class="card-sub">Quick access to all current pharmacy orders</div>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Patient</th>
+                            <th>Payment Method</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>Mobile</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="overviewOrdersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="page" id="page-orders">
+            <div class="orders-page-header">
+                <div>
+                    <div class="page-title">Orders <span>/ All</span></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="page" id="page-patients">
+            <div class="page-title">Patients</div>
+        </div>
+        <div class="page" id="page-analytics">
+            <div class="page-title">Analytics</div>
+        </div>
+        <div class="page" id="page-billing">
+            <div class="page-title">Billing</div>
+        </div>
+        <div class="page" id="page-settings">
+            <div class="page-title">Settings</div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-head-icon">📦</div>
+            <div>
+                <div class="modal-head-title" id="mOrderId">Order #ORD-0001</div>
+                <div class="modal-head-sub" id="mStatus">Processing</div>
+            </div>
+            <span class="modal-close" onclick="closeModal()">✕</span>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-actions">
+            <button class="btn-modal ghost" onclick="closeModal()">Close</button>
+            <button class="btn-modal" id="mChatBtn" style="background: #3b9edd; color: white; border: none;">💬 Chat</button>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-bg" id="chatModalBg" onclick="if(event.target===this)closeChat()">
+    <div class="modal chat-modal">
+        <div class="modal-head" style="background: #124a32;">
+            <div class="modal-head-icon" style="background: rgba(255,255,255,0.2); color: white;">💬</div>
+            <div>
+                <div class="modal-head-title" id="chatTitle" style="color: white;">Order Chat</div>
+                <div class="modal-head-sub" id="chatSub" style="color: #a8f0c6;">Customer</div>
+            </div>
+            <span class="modal-close" style="color: white;" onclick="closeChat()">✕</span>
+        </div>
+
+        <div class="chat-body" id="chatBody">
+        </div>
+
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()" />
+            <button class="btn-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/js/pharmacy_dashboard.js"></script>
+</body>
+</html>

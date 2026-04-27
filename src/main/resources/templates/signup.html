@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CareLink — Pharmacy Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/images/logo.jpg">
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+
+<div class="panel-left">
+    <div class="brand">
+        <div class="brand-logo">
+            <img src="/images/logo_bg_removed.png"
+                 height="40px" width="40px">
+            <span class="brand-name">CareLink</span>
+        </div>
+        <div class="brand-sub">Pharmacy Network</div>
+    </div>
+
+    <div class="hero-text">
+        <h1>Connect your<br/>pharmacy to<br/><em>Sri Lanka's</em><br/>health network.</h1>
+        <p>Join thousands of pharmacies delivering care smarter, faster, and closer to patients across the island.</p>
+    </div>
+
+    <div class="features">
+        <div class="feature-item">
+            <div class="feature-dot">🗺️</div>
+            <div class="feature-text">
+                <strong>Location-Aware Listings</strong>
+                <span>Patients nearby find you instantly</span>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-dot">📦</div>
+            <div class="feature-text">
+                <strong>Inventory Management</strong>
+                <span>Real-time stock & order tracking</span>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-dot">🔒</div>
+            <div class="feature-text">
+                <strong>Secure & Compliant</strong>
+                <span>HIPAA-aligned data protection</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-right">
+    <div class="form-header">
+        <h2>Register Pharmacy</h2>
+        <p>Fill in your pharmacy details to get started on CareLink.</p>
+    </div>
+
+    <div id="alertBanner" style="display: none; padding: 14px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; font-weight: 500; text-align: center; transition: 0.3s;"></div>
+
+    <div class="steps" id="steps">
+        <div class="step active" id="step-1" onclick="goStep(1)">
+            <div class="step-num">1</div>
+            <div class="step-label">Account</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" id="step-2" onclick="goStep(2)">
+            <div class="step-num">2</div>
+            <div class="step-label">Pharmacy</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" id="step-3" onclick="goStep(3)">
+            <div class="step-num">3</div>
+            <div class="step-label">Location</div>
+        </div>
+    </div>
+
+    <form id="signupForm" onsubmit="return false;">
+
+        <div class="form-section active" id="section-1">
+            <div class="section-title">Account Credentials</div>
+            <div class="field-grid">
+                <div class="field field-full">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="pharmacy@example.com" required/>
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="password" placeholder="Min. 8 characters" required/>
+                        <span class="input-icon" onclick="togglePass('password', this)">👁</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Confirm Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="confirmPassword" placeholder="Re-enter password" required/>
+                        <span class="input-icon" onclick="togglePass('confirmPassword', this)">👁</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-primary" onclick="nextStep(1)">Continue →</button>
+            </div>
+        </div>
+
+        <div class="form-section" id="section-2">
+            <div class="section-title">Pharmacy Details</div>
+            <div class="field-grid">
+                <div class="field field-full">
+                    <label>Pharmacy Name</label>
+                    <input type="text" id="pharmacyName" placeholder="e.g. Sathosa Pharmacy Colombo" required/>
+                </div>
+                <div class="field">
+                    <label>Contact Number</label>
+                    <input type="tel" id="contactNumber" placeholder="+94 77 123 4567"/>
+                </div>
+                <div class="field">
+                    <label>Role</label>
+                    <div class="select-wrap">
+                        <select id="role">
+                            <option value="PHARMACY">Pharmacy</option>
+                            <option value="PHARMACY_ADMIN">Pharmacy Admin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toggle-field">
+                <div class="toggle-field-info">
+                    <strong>Active Listing</strong>
+                    <span>Visible to patients on the network</span>
+                </div>
+                <button type="button" class="toggle on" id="activeToggle" onclick="this.classList.toggle('on')"></button>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-secondary" onclick="prevStep(2)">← Back</button>
+                <button type="button" class="btn-primary" onclick="nextStep(2)">Continue →</button>
+            </div>
+        </div>
+
+        <div class="form-section" id="section-3">
+            <div class="section-title">Address & Location</div>
+            <div class="field-grid">
+                <div class="field field-full">
+                    <label>Address Line 1</label>
+                    <input type="text" id="addressLine1" placeholder="No. 45, Galle Road"/>
+                </div>
+                <div class="field field-full">
+                    <label>Address Line 2</label>
+                    <input type="text" id="addressLine2" placeholder="Apartment, suite, etc. (optional)"/>
+                </div>
+                <div class="field">
+                    <label>City</label>
+                    <input type="text" id="city" placeholder="Colombo"/>
+                </div>
+                <div class="field">
+                    <label>District</label>
+                    <div class="select-wrap">
+                        <select id="district">
+                            <option value="">Select District</option>
+                            <option>Colombo</option><option>Gampaha</option><option>Kalutara</option>
+                            <option>Kandy</option><option>Matale</option><option>Nuwara Eliya</option>
+                            <option>Galle</option><option>Matara</option><option>Hambantota</option>
+                            <option>Jaffna</option><option>Kilinochchi</option><option>Mannar</option>
+                            <option>Vavuniya</option><option>Mullaitivu</option><option>Batticaloa</option>
+                            <option>Ampara</option><option>Trincomalee</option><option>Kurunegala</option>
+                            <option>Puttalam</option><option>Anuradhapura</option><option>Polonnaruwa</option>
+                            <option>Badulla</option><option>Moneragala</option><option>Ratnapura</option>
+                            <option>Kegalle</option><option>Negombo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-placeholder" onclick="detectLocation()">
+                <span>📍</span>
+                <strong>Pin Your Pharmacy Location</strong>
+                <p>Click to auto-detect or enter coordinates manually</p>
+            </div>
+
+            <div class="coords-row">
+                <div class="field">
+                    <label>Latitude</label>
+                    <input type="number" id="latitude" placeholder="6.9271" step="any"/>
+                </div>
+                <div class="field">
+                    <label>Longitude</label>
+                    <input type="number" id="longitude" placeholder="79.8612" step="any"/>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-secondary" onclick="prevStep(3)">← Back</button>
+                <button class="btn-primary" type="button" onclick="submitRegistration()">Create Account ✦</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="login-link">
+        Already have an account? <a href="/pharmacy-login">Sign in here</a>
+    </div>
+</div>
+
+<script src="/js/signup.js"></script>
+</body>
+</html>

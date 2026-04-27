@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CareLink — Pharmacy Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap"
+          rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/images/logo.jpg">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<div class="panel-left">
+    <div class="ring"></div>
+
+    <div class="brand">
+        <div class="brand-logo">
+            <div class="brand-icon">
+                <img src="/images/logo_bg_removed.png"
+                     height="40px" width="40px">
+            </div>
+            <span class="brand-name">CareLink</span>
+        </div>
+        <div class="brand-sub">Pharmacy Network</div>
+    </div>
+
+    <div class="center-visual">
+        <div class="pill-icon">🏥</div>
+        <h2>Welcome<br/>back to your<br/><em>pharmacy hub.</em></h2>
+        <p>Manage inventory, connect with patients, and keep your pharmacy running seamlessly.</p>
+        <div class="stats">
+            <div class="stat-pill">
+                <div class="stat-dot"></div>
+                <span>2,400+ Pharmacies</span>
+            </div>
+            <div class="stat-pill">
+                <div class="stat-dot"></div>
+                <span>All 25 Districts</span>
+            </div>
+            <div class="stat-pill">
+                <div class="stat-dot"></div>
+                <span>Live since 2024</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-left">© 2025 CareLink · Sri Lanka</div>
+</div>
+
+<div class="panel-right">
+
+    <div class="signin-box">
+        <div class="form-header">
+            <div class="welcome-back">Pharmacy Portal</div>
+            <h2>Sign in to<br/>your account</h2>
+            <p>Enter your registered email and password to access the dashboard.</p>
+        </div>
+
+        <div class="error-banner" id="errorBanner">
+            <span>⚠</span>
+            <span id="errorMsg">Invalid email or password. Please try again.</span>
+        </div>
+
+        <div class="field">
+            <label>Email Address</label>
+            <div class="input-wrap">
+                <input type="email" id="email" placeholder="pharmacy@example.com" autocomplete="email"/>
+                <span class="input-icon">✉</span>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="field-meta">
+                <label>Password</label>
+                <a href="#" class="forgot-link" onclick="showForgot(event)">Forgot password?</a>
+            </div>
+            <div class="input-wrap">
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password"/>
+                <span class="input-icon" id="eyeIcon" onclick="togglePass()">👁</span>
+            </div>
+        </div>
+
+        <div class="remember-row">
+            <div class="custom-cb" id="rememberCb" onclick="this.classList.toggle('checked')"></div>
+            <span onclick="document.getElementById('rememberCb').classList.toggle('checked')">Keep me signed in</span>
+        </div>
+
+        <button class="btn-signin" id="loginBtn" onclick="handleSignin()">
+            <div class="spinner" id="spinner"></div>
+            <span class="btn-label">Sign In</span>
+            <span>→</span>
+        </button>
+
+        <div class="signup-link">
+            Don't have an account? <a href="/pharmacy-signup">Register your pharmacy</a>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+<div id="modalBg"
+     style="display:none;position:fixed;inset:0;background:rgba(10,46,31,0.45);backdrop-filter:blur(4px);z-index:50;align-items:center;justify-content:center;">
+    <div style="background:var(--cream);border-radius:20px;padding:40px;width:100%;max-width:380px;margin:20px;position:relative;animation:fadeUp 0.3s forwards;">
+        <button onclick="closeModal()"
+                style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;color:var(--text-muted);cursor:pointer;">
+            ✕
+        </button>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--text-dark);margin-bottom:8px;">
+            Reset Password
+        </div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px;line-height:1.6;">Enter the email linked to
+            your pharmacy account. We'll send a reset link.</p>
+        <label style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:500;">Email
+            Address</label>
+        <div style="margin-top:7px;margin-bottom:20px;">
+            <input type="email" id="resetEmail" placeholder="pharmacy@example.com"
+                   style="width:100%;height:48px;border:1.5px solid var(--cream-dark);border-radius:12px;padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text-dark);background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+                   onfocus="this.style.borderColor='var(--green-accent)';this.style.boxShadow='0 0 0 3px rgba(46,204,113,0.12)'"
+                   onblur="this.style.borderColor='var(--cream-dark)';this.style.boxShadow='none'"/>
+        </div>
+        <button onclick="sendReset()"
+                style="width:100%;height:48px;background:var(--green-deep);color:var(--cream);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background 0.2s;"
+                onmouseover="this.style.background='var(--green-mid)'"
+                onmouseout="this.style.background='var(--green-deep)'">Send Reset Link →
+        </button>
+        <div id="resetSuccess"
+             style="display:none;margin-top:14px;text-align:center;font-size:12.5px;color:var(--green-mid);">✓ Reset
+            link sent! Check your inbox.
+        </div>
+    </div>
+</div>
+
+
+<script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CareLink — Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/images/logo.jpg">
+    <link rel="stylesheet" href="/css/admin_dashboard.css">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sb-brand">
+        <div class="sb-logo">
+            <img src="/images/logo.jpg" alt="CareLink"/>
+        </div>
+        <div>
+            <div class="sb-brand-name">CareLink</div>
+            <span class="sb-brand-tag">Admin</span>
+        </div>
+    </div>
+
+    <nav class="sb-nav">
+        <div class="sb-group-label">Dashboard</div>
+        <div class="sb-item active" onclick="setPage('overview',this)">
+            <div class="sb-icon">🏠</div>
+            <span class="sb-item-label">Overview</span>
+        </div>
+
+        <div class="sb-group-label">Manage</div>
+        <div class="sb-item" onclick="setPage('products',this)">
+            <div class="sb-icon">💊</div>
+            <span class="sb-item-label">Products</span>
+            <span class="sb-count" id="productsBadge">0</span>
+        </div>
+        <div class="sb-item" onclick="setPage('admins',this)">
+            <div class="sb-icon">👤</div>
+            <span class="sb-item-label">Admins</span>
+            <span class="sb-count" id="adminsBadge">0</span>
+        </div>
+        <div class="sb-item" onclick="setPage('pharmacies',this)">
+            <div class="sb-icon">🏥</div>
+            <span class="sb-item-label">Pharmacies</span>
+        </div>
+        <div class="sb-item" onclick="setPage('orders',this)">
+            <div class="sb-icon">📦</div>
+            <span class="sb-item-label">Orders</span>
+        </div>
+
+        <div class="sb-group-label">System</div>
+        <div class="sb-item" onclick="setPage('settings',this)">
+            <div class="sb-icon">⚙️</div>
+            <span class="sb-item-label">Settings</span>
+        </div>
+
+    </nav>
+
+    <div class="sb-footer">
+        <div class="sb-user">
+            <div class="sb-avatar">SA</div>
+            <div>
+                <span class="sb-user-name">Admin</span>
+                <span class="sb-user-role">carelink.lk</span>
+            </div>
+            <span class="sb-logout" onclick="logout()" title="Logout">⏻</span>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <span class="topbar-title" id="topbarTitle">Overview</span>
+        <div class="topbar-right">
+            <div class="tb-search">
+                <span>🔍</span>
+                <input type="text" id="globalSearch" placeholder="Search…" oninput="handleGlobalSearch(this.value)"/>
+            </div>
+            <div class="tb-btn">🔔<div class="tb-dot"></div></div>
+            <div class="tb-btn">⚙️</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="page active" id="page-overview">
+            <div class="stats-row">
+                <div class="stat-card green">
+                    <div class="stat-row">
+                        <div class="stat-ico green">💊</div>
+                    </div>
+                    <div class="stat-value" id="ov-prod">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-card gold">
+                    <div class="stat-row">
+                        <div class="stat-ico gold">👤</div>
+                    </div>
+                    <div class="stat-value" id="ov-admin">0</div>
+                    <div class="stat-label">Total Admins</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-row">
+                        <div class="stat-ico blue">🏥</div>
+                    </div>
+                    <div class="stat-value" id="ov-pharm">0</div>
+                    <div class="stat-label">Pharmacies</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="stat-row">
+                        <div class="stat-ico red">📦</div>
+                    </div>
+                    <div class="stat-value" id="ov-orders">0</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Quick Overview</div>
+                    <div class="section-sub">Recently added items</div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div style="padding:16px 18px; border-bottom: 1px solid var(--border); display:flex; gap:10px; align-items:center;">
+                    <span style="font-size:13px;color:var(--text-2);font-weight:600;">Recent Orders</span>
+                    <span style="margin-left:auto;"></span>
+                    <button class="btn-add" style="height:30px;font-size:12px;" onclick="setPage('orders', document.querySelectorAll('.sb-item')[4])">See All →</button>
+                </div>
+                <div id="overviewProductTable"></div>
+            </div>
+        </div>
+
+        <div class="page" id="page-products">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Products</div>
+                    <div class="section-sub" id="prod-sub">Manage medication catalogue</div>
+                </div>
+                <button class="btn-add" onclick="openProductModal()">＋ Add Product</button>
+            </div>
+
+            <div class="table-card">
+                <div class="table-toolbar">
+                    <div class="filter-tabs">
+                        <button class="ftab active" onclick="filterProducts('all',this)">All</button>
+                    </div>
+                    <div class="tbl-search ml">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Search products…" oninput="searchProducts(this.value)"/>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="productsTbody"></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="page" id="page-admins">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Admins</div>
+                    <div class="section-sub" id="admin-sub">Manage system administrators</div>
+                </div>
+                <button class="btn-add" onclick="openAdminModal()">＋ Add Admin</button>
+            </div>
+
+            <div class="table-card">
+                <div class="table-toolbar">
+                    <div class="filter-tabs">
+                        <button class="ftab active" onclick="filterAdmins('all',this)">All</button>
+                        <button class="ftab" onclick="filterAdmins('admin',this)">Admin</button>
+                        <button class="ftab" onclick="filterAdmins('manager',this)">Manager</button>
+                        <button class="ftab" onclick="filterAdmins('viewer',this)">Viewer</button>
+                    </div>
+                    <div class="tbl-search ml">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Search admins…" oninput="searchAdmins(this.value)"/>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Admin</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Added</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="adminsTbody"></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="page" id="page-pharmacies">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Pharmacies</div>
+                    <div class="section-sub">Manage pharmacies</div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody id="pharmacyTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-orders">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Orders</div>
+                    <div class="section-sub">Manage customer orders</div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Tracking ID</th>
+                            <th>Customer</th>
+                            <th>Pharmacy</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody id="ordersTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page-settings">
+            <div class="section-title" style="margin-bottom:16px">Settings</div>
+            <div class="table-card" style="padding:60px;text-align:center;color:var(--text-3);font-size:13px;">⚙️ Settings coming soon</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-bg" id="productModal">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-head-ico" id="prodModalIco">💊</div>
+            <div>
+                <div class="modal-title" id="prodModalTitle">Add Product</div>
+                <div class="modal-sub">Fill in medication details</div>
+            </div>
+            <span class="modal-close" onclick="closeModal('productModal')">✕</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="field form-full">
+                    <label>Product Name *</label>
+                    <input type="text" id="p-name" placeholder="e.g. Amoxicillin 500mg"/>
+                </div>
+                <div class="field form-full">
+                    <label>Category</label>
+                    <div class="select-wrap">
+                        <select id="p-category">
+                            <option value="">Select category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field form-full">
+                    <label>Unit Price (Rs.) *</label>
+                    <input type="number" id="p-price" placeholder="0.00" min="0" step="0.01"/>
+                </div>
+                <div class="field form-full">
+                    <label>Description</label>
+                    <textarea id="p-desc" placeholder="Brief product description"></textarea>
+                </div>
+
+                <div class="field form-full">
+                    <label>Product Images</label>
+                    <div class="img-upload-area" id="imgUploadArea" onclick="document.getElementById('p-images').click()">
+                        <div class="img-upload-icon">📷</div>
+                        <div class="img-upload-text">Click to select images</div>
+                        <div class="img-upload-sub">PNG, JPG supported • Multiple allowed</div>
+                        <input type="file" id="p-images" accept="image/*" multiple style="display:none"
+                               onchange="handleImageSelect(this)"/>
+                    </div>
+                    <div class="img-preview-grid" id="imgPreviewGrid"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('productModal')">Cancel</button>
+            <button class="btn-save" id="prodSaveBtn" onclick="saveProduct()">Save Product</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-bg" id="adminModal">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-head-ico blue">👤</div>
+            <div>
+                <div class="modal-title" id="adminModalTitle">Add Admin</div>
+                <div class="modal-sub">Create a new admin account</div>
+            </div>
+            <span class="modal-close" onclick="closeModal('adminModal')">✕</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Full Name *</label>
+                    <input type="text" id="a-name" placeholder="e.g. Kishan Perera"/>
+                </div>
+                <div class="field">
+                    <label>Email *</label>
+                    <input type="email" id="a-email" placeholder="admin@carelink.lk"/>
+                </div>
+                <div class="field">
+                    <label>Role *</label>
+                    <div class="select-wrap">
+                        <select id="a-role">
+                            <option value="admin">Admin</option>
+                            <option value="manager">Manager</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Status</label>
+                    <div class="select-wrap">
+                        <select id="a-status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field" id="a-pw-field">
+                    <label>Password *</label>
+                    <input type="password" id="a-password" placeholder="Min. 8 characters"/>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('adminModal')">Cancel</button>
+            <button class="btn-save" style="background:var(--blue);color:#fff;" id="adminSaveBtn" onclick="saveAdmin()">Save Admin</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-bg" id="deleteModal">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-head-ico red">🗑️</div>
+            <div>
+                <div class="modal-title">Confirm Delete</div>
+                <div class="modal-sub">This action cannot be undone</div>
+            </div>
+            <span class="modal-close" onclick="closeModal('deleteModal')">✕</span>
+        </div>
+        <div class="delete-body">
+            <div class="delete-ico">⚠️</div>
+            <div class="delete-msg">Are you sure you want to delete <span class="delete-name" id="deleteName">"Item"</span>?<br/>This will permanently remove it from the system.</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+            <button class="btn-save red" id="confirmDeleteBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    <span class="toast-ico" id="toastIco">✓</span>
+    <span id="toastMsg">Done</span>
+    <div class="toast-bar" id="toastBar"></div>
+</div>
+
+<script src="/js/admin_dashboard.js"></script>
+</body>
+</html>
