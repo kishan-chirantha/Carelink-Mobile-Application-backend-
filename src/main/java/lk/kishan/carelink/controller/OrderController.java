@@ -188,4 +188,14 @@ public class OrderController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/pharmacy/{pharmacyId}")
+    public ResponseEntity<List<Order>> getPharmacyOrders(@PathVariable Long pharmacyId) {
+        try {
+            List<Order> orders = orderRepository.findByPharmacyIdOrderByOrderDateDesc(pharmacyId);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
