@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>CareLink — Admin Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
     <link rel="icon" type="image/png" href="/images/logo.jpg">
     <link rel="stylesheet" href="/css/admin_dashboard.css">
@@ -115,20 +116,32 @@
                 </div>
             </div>
 
-            <div class="section-header">
+            <div class="section-header" style="margin-top: 20px;">
                 <div>
                     <div class="section-title">Quick Overview</div>
-                    <div class="section-sub">Recently added items</div>
+                    <div class="section-sub">Recently added items and statistics</div>
                 </div>
             </div>
 
-            <div class="table-card">
-                <div style="padding:16px 18px; border-bottom: 1px solid var(--border); display:flex; gap:10px; align-items:center;">
-                    <span style="font-size:13px;color:var(--text-2);font-weight:600;">Recent Orders</span>
-                    <span style="margin-left:auto;"></span>
-                    <button class="btn-add" style="height:30px;font-size:12px;" onclick="setPage('orders', document.querySelectorAll('.sb-item')[4])">See All →</button>
+            <!-- අලුත් Flexbox Layout එක: Chart එක වමේ, Table එක දකුණේ -->
+            <div style="display: flex; gap: 20px; align-items: flex-start; margin-top: 15px;">
+
+                <!-- වම් පැත්ත: Chart එක -->
+                <div class="table-card" style="flex: 0 0 350px; padding: 20px; text-align: center; margin: 0;">
+                    <div style="font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 15px;">Order Status Distribution</div>
+                    <canvas id="orderStatusChart" width="200" height="200"></canvas>
                 </div>
-                <div id="overviewProductTable"></div>
+
+                <!-- දකුණු පැත්ත: Recent Orders Table එක -->
+                <div class="table-card" style="flex: 1; margin: 0;">
+                    <div style="padding:16px 18px; border-bottom: 1px solid var(--border); display:flex; gap:10px; align-items:center;">
+                        <span style="font-size:13px;color:var(--text-2);font-weight:600;">Recent Orders</span>
+                        <span style="margin-left:auto;"></span>
+                        <button class="btn-add" style="height:30px;font-size:12px;" onclick="setPage('orders', document.querySelectorAll('.sb-item')[4])">See All →</button>
+                    </div>
+                    <div id="overviewProductTable"></div>
+                </div>
+
             </div>
         </div>
 

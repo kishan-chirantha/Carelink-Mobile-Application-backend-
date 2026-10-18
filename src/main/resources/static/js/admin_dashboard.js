@@ -524,6 +524,8 @@ function updateDashboardOverview() {
     }
     html += `</tbody></table>`;
     tbody.innerHTML = html;
+
+    renderOrderStatusChart();
 }
 
 function confirmDelete(id, type, name) {
@@ -573,4 +575,56 @@ function logout() {
     localStorage.removeItem('JWT_TOKEN');
     showToast('Logged out!');
     setTimeout(() => { window.location.href = '/pharmacy-login'; }, 1000);
+}
+
+let orderChartInstance = null;
+
+function renderOrderStatusChart() {
+    const ctx = document.getElementById('orderStatusChart');
+    if (!ctx) return;
+
+    // Chart එකට අවශ්‍ය දත්ත ගණනය කිරීම
+    let pendingCount = 0;
+    let processingCount = 0;
+    let deliveredCount = 0;
+    let cancelledCount = 0;
+
+    orders.forEach(o => {
+        if (o.status === 'PENDING') pendingCount++;
+        else if (o.status === 'PROCESSING') processingCount++;
+        else if (o.status === 'DELIVERED') deliveredCount++;
+        else if (o.status === 'CANCELLED') cancelledCount++;
+    });
+
+    // කලින් Chart එකක් තිබුණා නම් ඒක අයින් කරනවා (Update වෙද්දි එක පිට එක වැටෙන එක නවත්වන්න)
+    if (orderChartInstance) {
+        orderChartInstance.destroy();
+    }
+
+    orderChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Pending', 'Processing', 'Delivered', 'Cancelled'],
+            datasets: [{
+                data: [pendingCount, processingCount, deliveredCount, cancelledCount],
+                backgroundColor: [
+                    '#ffc107', // Gold for Pending
+                    '#3b9edd', // Blue for Processing
+                    '#2ecc71', // Green for Delivered
+                    '#e74c3c'  // Red for Cancelled
+                ],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { family: "'DM Sans', sans-serif", size: 12 } }
+                }
+            }
+        }
+    });
 }
