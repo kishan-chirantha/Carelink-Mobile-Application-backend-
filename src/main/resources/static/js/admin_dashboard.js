@@ -583,7 +583,6 @@ function renderOrderStatusChart() {
     const ctx = document.getElementById('orderStatusChart');
     if (!ctx) return;
 
-    // Chart එකට අවශ්‍ය දත්ත ගණනය කිරීම
     let pendingCount = 0;
     let processingCount = 0;
     let deliveredCount = 0;
@@ -596,7 +595,6 @@ function renderOrderStatusChart() {
         else if (o.status === 'CANCELLED') cancelledCount++;
     });
 
-    // කලින් Chart එකක් තිබුණා නම් ඒක අයින් කරනවා (Update වෙද්දි එක පිට එක වැටෙන එක නවත්වන්න)
     if (orderChartInstance) {
         orderChartInstance.destroy();
     }
@@ -608,10 +606,10 @@ function renderOrderStatusChart() {
             datasets: [{
                 data: [pendingCount, processingCount, deliveredCount, cancelledCount],
                 backgroundColor: [
-                    '#ffc107', // Gold for Pending
-                    '#3b9edd', // Blue for Processing
-                    '#2ecc71', // Green for Delivered
-                    '#e74c3c'  // Red for Cancelled
+                    '#ffc107',
+                    '#3b9edd',
+                    '#2ecc71',
+                    '#e74c3c'
                 ],
                 borderWidth: 0,
                 hoverOffset: 4
