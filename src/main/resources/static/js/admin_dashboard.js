@@ -476,16 +476,16 @@ function renderOrders() {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-3);">No orders found</td></tr>`;
         return;
     }
-    orders.forEach(o => {
+    [...orders].reverse().forEach(o => {
         let badgeClass = o.status === 'PENDING' ? 'status-inactive' : 'status-active';
         let customerName = o.customer?.name || o.customerName || 'Unknown';
         tbody.innerHTML += `<tr>
-            <td style="font-weight:500;">${o.trackingId || 'N/A'}</td>
-            <td style="color:var(--blue); font-weight:500;">${customerName}</td>
-            <td>${o.pharmacy?.pharmacyName || '-'}</td>
-            <td style="font-weight:600;">Rs. ${o.totalAmount?.toFixed(2) || '0.00'}</td>
-            <td><span class="status-badge ${badgeClass}">${o.status || 'N/A'}</span></td>
-        </tr>`;
+        <td style="font-weight:500;">${o.trackingId || 'N/A'}</td>
+        <td style="color:var(--blue); font-weight:500;">${customerName}</td>
+        <td>${o.pharmacy?.pharmacyName || '-'}</td>
+        <td style="font-weight:600;">Rs. ${o.totalAmount?.toFixed(2) || '0.00'}</td>
+        <td><span class="status-badge ${badgeClass}">${o.status || 'N/A'}</span></td>
+    </tr>`;
     });
 }
 
@@ -510,16 +510,16 @@ function updateDashboardOverview() {
     if (orders.length === 0) {
         html += `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-3);">No recent orders</td></tr>`;
     } else {
-        orders.slice(0, 4).forEach(o => {
+        [...orders].reverse().slice(0, 4).forEach(o => {
             let badgeClass = o.status === 'PENDING' ? 'status-inactive' : 'status-active';
             let customerName = o.customer?.name || o.customerName || 'Unknown';
             html += `<tr style="border-bottom:1px solid var(--border);font-size:14px;">
-                <td style="padding:12px 18px;font-weight:500;">${o.trackingId || 'N/A'}</td>
-                <td style="padding:12px 18px;color:var(--blue);font-weight:500;">${customerName}</td>
-                <td style="padding:12px 18px;">${o.pharmacy?.pharmacyName || '-'}</td>
-                <td style="padding:12px 18px;font-weight:600;">Rs. ${o.totalAmount?.toFixed(2) || '0.00'}</td>
-                <td style="padding:12px 18px;"><span class="status-badge ${badgeClass}">${o.status || 'N/A'}</span></td>
-            </tr>`;
+            <td style="padding:12px 18px;font-weight:500;">${o.trackingId || 'N/A'}</td>
+            <td style="padding:12px 18px;color:var(--blue);font-weight:500;">${customerName}</td>
+            <td style="padding:12px 18px;">${o.pharmacy?.pharmacyName || '-'}</td>
+            <td style="padding:12px 18px;font-weight:600;">Rs. ${o.totalAmount?.toFixed(2) || '0.00'}</td>
+            <td style="padding:12px 18px;"><span class="status-badge ${badgeClass}">${o.status || 'N/A'}</span></td>
+        </tr>`;
         });
     }
     html += `</tbody></table>`;
